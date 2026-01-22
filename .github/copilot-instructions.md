@@ -65,7 +65,7 @@ Use `npm ci` for consistent, reproducible builds (especially in CI/CD).
 - `eslint.config.js` - ESLint configuration
 
 ## Important Notes
-- The project uses React 19 with the experimental React compiler
+- The project uses React 19 with the React compiler
 - TypeScript is configured with strict mode
 - Always run `npm ci` before building or testing
 
