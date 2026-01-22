@@ -87,10 +87,13 @@ describe('ProductDetail', () => {
   });
 
   it('displays loading state when product data is being fetched', async () => {
-    // Arrange - Create a promise that never resolves to simulate loading
-    vi.mocked(productService.getProduct).mockImplementation(
-      () => new Promise(() => {})
-    );
+    // Arrange - Create a delayed promise to simulate loading
+    let resolvePromise: (value: Product) => void;
+    const pendingPromise = new Promise<Product>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    vi.mocked(productService.getProduct).mockReturnValue(pendingPromise);
 
     // Act
     render(<ProductDetail />, { wrapper: createWrapper() });
@@ -102,6 +105,9 @@ describe('ProductDetail', () => {
       // During loading, the title should either not exist or be empty
       expect(title?.textContent).toBeFalsy();
     });
+
+    // Clean up - resolve the promise to prevent memory leak
+    resolvePromise!(mockProduct);
   });
 
   it('handles missing or malformed data gracefully', async () => {
