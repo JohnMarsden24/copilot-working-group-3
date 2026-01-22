@@ -67,14 +67,23 @@
   font-weight: 600;
 }
 
+.stockAndButton {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
 .stock {
   font-size: 0.8rem;
   color: #48bb78;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .lowStock {
   font-size: 0.8rem;
   color: #ed8936;
   font-weight: 600;
+  flex-shrink: 0;
 }
