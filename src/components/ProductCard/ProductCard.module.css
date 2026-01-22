@@ -71,10 +71,12 @@
   font-size: 0.8rem;
   color: #48bb78;
   font-weight: 500;
+  min-height: 1.2em;
 }
 
 .lowStock {
   font-size: 0.8rem;
   color: #ed8936;
   font-weight: 600;
+  min-height: 1.2em;
 }
