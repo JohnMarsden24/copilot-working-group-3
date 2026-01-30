@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { ProductDetail } from './index';
 import { CartProvider } from '../../contexts/CartContext';
 import type { Product } from '../../types/product';
@@ -49,7 +50,9 @@ const createWrapper = () => {
 
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>{children}</CartProvider>
+      <CartProvider>
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+      </CartProvider>
     </QueryClientProvider>
   );
 };
@@ -98,16 +101,16 @@ describe('ProductDetail', () => {
     // Act
     render(<ProductDetail />, { wrapper: createWrapper() });
 
-    // Assert - The component should render but without product data
-    // When loading, the component will render empty values or undefined
-    await waitFor(() => {
-      const title = screen.queryByRole('heading', { level: 1 });
-      // During loading, the title should either not exist or be empty
-      expect(title?.textContent).toBeFalsy();
-    });
+    // Assert - The Suspense fallback should be shown during loading
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     // Clean up - resolve the promise to prevent memory leak
     resolvePromise!(mockProduct);
+
+    // Wait for the product to be loaded
+    await waitFor(() => {
+      expect(screen.getByText('Test Product')).toBeInTheDocument();
+    });
   });
 
   it('handles missing or malformed data gracefully', async () => {

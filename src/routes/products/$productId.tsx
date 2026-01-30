@@ -1,23 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useProduct } from '../../hooks/useProduct';
+import { Suspense } from 'react';
 import { Layout } from '../../components/ui/Layout';
 import { Header } from '../../components/Header';
 import { ProductDetail } from '../../components/ProductDetail';
 
 const ProductPage = () => {
-  const { data: product, isLoading, error } = useProduct();
-
   return (
     <Layout>
       <Layout.Header>
         <Header />
       </Layout.Header>
       <Layout.Main>
-        {isLoading && <p>Loading product...</p>}
-
-        {error && <p>Error loading product: {error.message}</p>}
-
-        {product && <ProductDetail />}
+        <Suspense fallback={<p>Loading product...</p>}>
+          <ProductDetail />
+        </Suspense>
       </Layout.Main>
     </Layout>
   );
