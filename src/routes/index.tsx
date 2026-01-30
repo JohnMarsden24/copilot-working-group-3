@@ -6,7 +6,7 @@ import { ProductGrid } from '../components/ProductGrid';
 import { ProductCard } from '../components/ProductCard';
 
 const IndexPage = () => {
-  const { data, isLoading, error } = useProducts();
+  const { data } = useProducts();
 
   return (
     <Layout>
@@ -16,17 +16,11 @@ const IndexPage = () => {
       <Layout.Main>
         <h1>Featured Products</h1>
 
-        {isLoading && <p>Loading products...</p>}
-
-        {error && <p>Error loading products: {error.message}</p>}
-
-        {data && (
-          <ProductGrid>
-            {data.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </ProductGrid>
-        )}
+        <ProductGrid>
+          {data.products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </ProductGrid>
       </Layout.Main>
     </Layout>
   );
