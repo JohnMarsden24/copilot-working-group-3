@@ -7,6 +7,15 @@ import { routeTree } from './routeTree.gen';
 import { CartProvider } from './contexts/CartContext';
 import './index.css';
 
+// Start MSW in development
+if (import.meta.env.DEV) {
+  import('./mocks/browser').then(({ worker }) => {
+    worker.start({
+      onUnhandledRequest: 'bypass',
+    });
+  });
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
