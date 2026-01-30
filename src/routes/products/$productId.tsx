@@ -5,7 +5,7 @@ import { Header } from '../../components/Header';
 import { ProductDetail } from '../../components/ProductDetail';
 
 const ProductPage = () => {
-  const { data: product } = useProduct();
+  useProduct();
 
   return (
     <Layout>
