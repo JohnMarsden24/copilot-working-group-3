@@ -6,7 +6,7 @@ import { Header } from '../../components/Header';
 import { ProductDetail } from '../../components/ProductDetail';
 
 const ProductPageContent = () => {
-  const { data: product } = useProduct();
+  useProduct();
 
   return (
     <Layout>
@@ -14,7 +14,7 @@ const ProductPageContent = () => {
         <Header />
       </Layout.Header>
       <Layout.Main>
-        {product && <ProductDetail />}
+        <ProductDetail />
       </Layout.Main>
     </Layout>
   );

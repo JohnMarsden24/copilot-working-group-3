@@ -17,13 +17,11 @@ const IndexPageContent = () => {
       <Layout.Main>
         <h1>Featured Products</h1>
 
-        {data && (
-          <ProductGrid>
-            {data.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </ProductGrid>
-        )}
+        <ProductGrid>
+          {data.products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </ProductGrid>
       </Layout.Main>
     </Layout>
   );
