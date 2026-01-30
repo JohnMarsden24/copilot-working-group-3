@@ -1,12 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { Suspense } from 'react';
 import { useProducts } from '../hooks/useProducts';
 import { Layout } from '../components/ui/Layout';
 import { Header } from '../components/Header';
 import { ProductGrid } from '../components/ProductGrid';
 import { ProductCard } from '../components/ProductCard';
 
-const IndexPage = () => {
-  const { data, isLoading, error } = useProducts();
+const IndexPageContent = () => {
+  const { data } = useProducts();
 
   return (
     <Layout>
@@ -15,10 +16,6 @@ const IndexPage = () => {
       </Layout.Header>
       <Layout.Main>
         <h1>Featured Products</h1>
-
-        {isLoading && <p>Loading products...</p>}
-
-        {error && <p>Error loading products: {error.message}</p>}
 
         {data && (
           <ProductGrid>
@@ -29,6 +26,14 @@ const IndexPage = () => {
         )}
       </Layout.Main>
     </Layout>
+  );
+};
+
+const IndexPage = () => {
+  return (
+    <Suspense fallback={<Layout><Layout.Main><p>Loading products...</p></Layout.Main></Layout>}>
+      <IndexPageContent />
+    </Suspense>
   );
 };
 
