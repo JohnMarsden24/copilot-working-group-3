@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { ProductDetail } from './index';
 import { CartProvider } from '../../contexts/CartContext';
+import { ErrorBoundary } from '../ErrorBoundary';
 import type { Product } from '../../types/product';
 
 // Mock the router hooks
@@ -51,7 +52,9 @@ const createWrapper = () => {
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <ErrorBoundary fallback={(error) => <div>Error: {error.message}</div>}>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </ErrorBoundary>
       </CartProvider>
     </QueryClientProvider>
   );
@@ -110,6 +113,20 @@ describe('ProductDetail', () => {
     // Wait for the product to be loaded
     await waitFor(() => {
       expect(screen.getByText('Test Product')).toBeInTheDocument();
+    });
+  });
+
+  it('handles API errors gracefully with error boundary', async () => {
+    // Arrange - Mock a failed API call
+    const errorMessage = 'Failed to fetch product';
+    vi.mocked(productService.getProduct).mockRejectedValue(new Error(errorMessage));
+
+    // Act
+    render(<ProductDetail />, { wrapper: createWrapper() });
+
+    // Assert - Error boundary should catch and display the error
+    await waitFor(() => {
+      expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
     });
   });
 

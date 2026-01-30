@@ -5,6 +5,7 @@ import { Layout } from '../components/ui/Layout';
 import { Header } from '../components/Header';
 import { ProductGrid } from '../components/ProductGrid';
 import { ProductCard } from '../components/ProductCard';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 const ProductList = () => {
   const { data } = useProducts();
@@ -27,9 +28,13 @@ const IndexPage = () => {
       <Layout.Main>
         <h1>Featured Products</h1>
 
-        <Suspense fallback={<p>Loading products...</p>}>
-          <ProductList />
-        </Suspense>
+        <ErrorBoundary
+          fallback={(error) => <p>Error loading products: {error.message}</p>}
+        >
+          <Suspense fallback={<p>Loading products...</p>}>
+            <ProductList />
+          </Suspense>
+        </ErrorBoundary>
       </Layout.Main>
     </Layout>
   );
